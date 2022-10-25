@@ -16,6 +16,12 @@ class UserController {
     }
     res.status(200).json(result);
   }
+
+  async validate(req: Request, res: Response) {
+    const token = req.header('Authorization');
+    const role = await this.service.validate(token);
+    res.status(200).json({ role });
+  }
 }
 
 export default UserController;

@@ -15,8 +15,8 @@ class UserService {
     return token;
   }
 
-  verifyToken(token: string) {
-    const payload = jwt.verify(token, this.jwtSecret);
+  verifyToken(token: string): IUser {
+    const payload = jwt.verify(token, this.jwtSecret) as IUser;
     return payload;
   }
 
@@ -31,6 +31,13 @@ class UserService {
       throw new Error();
     } catch (error) {
       return { message: 'Incorrect email or password' };
+    }
+  }
+
+  async validate(token: string | undefined) {
+    if (token) {
+      const { role } = this.verifyToken(token);
+      return role;
     }
   }
 }
