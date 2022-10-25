@@ -33,7 +33,10 @@ const user = {
     },
   };
 
+const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJVc2VyIiwicm9sZSI6InVzZXIiLCJlbWFpbCI6InVzZXJAdXNlci5jb20iLCJwYXNzd29yZCI6IiQyYSQwOCRZOEFiaThqWHZzWHlxbS5ybXAwQi51UUJBNXFVejdUNkdobGcvQ3ZWci9nTHhZajVVQVpWTyIsImlhdCI6MTY2NjY3NzM5M30.EFPexx1S_0KPSoDBuOAY-ThxQX3UvJbIkJvN3EhUaj0';
+
 export {
   admin,
-  user
+  user,
+  token
 }

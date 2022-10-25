@@ -24,8 +24,11 @@ class UserService {
     try {
       const user = await UserModel.findOne({ where: { email } }) as UserModel;
       const passwordIsValid = bcrypt.compareSync(password as string, user.password);
+      const payload = {
+        id: user.id, username: user.username, role: user.role, email: user.email,
+      };
       if (passwordIsValid) {
-        const token = this.generateToken(user as IUser);
+        const token = this.generateToken(payload);
         return { token };
       }
       throw new Error();

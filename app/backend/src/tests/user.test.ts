@@ -7,7 +7,7 @@ import { app } from '../app';
 import User from '../database/models/User';
 
 import { Response } from 'superagent';
-import { user } from './mocks/user.mock';
+import { token, user } from './mocks/user.mock';
 const { dbUser, validUser } = user;
 
 import UserService from '../services/user.service';
@@ -32,39 +32,53 @@ describe('Users e Login', () => {
     (User.findOne as sinon.SinonStub).restore();
   })
 
-  it('POST /login', async () => {
-    res = await chai
-       .request(app).post('/login').send({
-        email: validUser.email,
+  describe('POST /login', () => {
+    it('Token', async () => {
+      res = await chai
+         .request(app).post('/login').send({
+          email: validUser.email,
+          password: validUser.password
+         });
+      const payload = userService.verifyToken(res.body.token);
+      payload.iat = 0;
+      expect(res.status).to.equal(200);
+      expect(payload).to.deep.equal({
+        id: dbUser.id,
+        role: dbUser.role,
+        username: dbUser.username,
+        email: dbUser.email,
+        iat: 0
+      });
+    });
+  
+    it('All fields must be filled', async () => {
+      res = await chai.request(app).post('/login').send({
         password: validUser.password
-       });
-
-    expect(res.status).to.equal(200);
-    expect(userService.verifyToken(res.body.token)).to.deep.equal({
-      id: dbUser.id,
-      role: dbUser.role,
-      username: dbUser.username,
-      email: dbUser.email,
+      });
+      expect(res.status).to.equal(400);
     });
-  });
-
-  it('POST /login, All fields must be filled', async () => {
-    res = await chai.request(app).post('/login').send({
-      password: validUser.password
+  
+    it('Incorrect email or password', async () => {
+      res = await chai.request(app).post('/login').send({
+        email: 'email',
+        password: 'password'
+      });
+  
+      expect(res.status).to.equal(401);
+      expect(res.body).to.deep.equal({
+        message: 'Incorrect email or password'
+      });
     });
-    expect(res.status).to.equal(400);
-  });
+  })
 
-  it('POST /login, Incorrect email or password', async () => {
-    res = await chai.request(app).post('/login').send({
-      email: 'email',
-      password: 'password'
+  describe('GET /login/validate', () => {
+    it('Role', async () => {
+      res = await chai.request(app).get('/login/validate').set('Authorization', token).send();
+  
+      expect(res.status).to.equal(200);
+      expect(res.body).to.deep.equal({
+        role: 'user'
+      });
     });
-
-    expect(res.status).to.equal(401);
-    expect(userService.verifyToken(res.body)).to.deep.equal({
-      message: 'Incorrect email or password'
-    });
-  });
-
+  })
 });
