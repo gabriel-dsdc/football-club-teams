@@ -6,7 +6,7 @@ import { IMatch } from '../interfaces/IMatch';
 class MatchService {
   private _allMatches: MatchModel[];
   private _newMatch: MatchModel;
-  private _finishedMatch: [number, MatchModel[]];
+  private _updatedMatch: [number, MatchModel[]];
   protected userService: UserService;
 
   async getAll(inProgress: boolean | undefined) {
@@ -40,8 +40,16 @@ class MatchService {
   }
 
   async finishMatch(id: number) {
-    this._finishedMatch = await MatchModel.update({ inProgress: false }, { where: { id } });
-    return this._finishedMatch;
+    this._updatedMatch = await MatchModel.update({ inProgress: false }, { where: { id } });
+    return this._updatedMatch;
+  }
+
+  async editMatch({ id, homeTeamGoals, awayTeamGoals }: IMatch) {
+    this._updatedMatch = await MatchModel.update(
+      { homeTeamGoals, awayTeamGoals },
+      { where: { id, inProgress: true } },
+    );
+    return this._updatedMatch;
   }
 }
 

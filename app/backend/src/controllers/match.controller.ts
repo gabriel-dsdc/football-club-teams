@@ -31,6 +31,15 @@ class MatchController {
     await this.service.finishMatch(Number(id));
     res.status(200).json({ message: 'Finished' });
   }
+
+  async editMatch(req: Request, res: Response) {
+    const { id } = req.params;
+    const { homeTeamGoals, awayTeamGoals } = req.body;
+    const [editedMatch] = await this.service.editMatch(
+      { id: Number(id), homeTeamGoals, awayTeamGoals },
+    );
+    res.status(200).json({ message: editedMatch ? 'Edited' : 'Not in Progress' });
+  }
 }
 
 export default MatchController;
