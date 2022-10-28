@@ -19,9 +19,9 @@ class MatchController {
     const { homeTeam, homeTeamGoals, awayTeam, awayTeamGoals } = req.body;
     const newMatch = await this.service.createMatch(
       { homeTeam, homeTeamGoals, awayTeam, awayTeamGoals },
-    ) as { message: string };
+    ) as { status: number, message: string };
     if (newMatch.message) {
-      return res.status(422).json({ message: newMatch.message });
+      return res.status(newMatch.status).json({ message: newMatch.message });
     }
     res.status(201).json(newMatch);
   }

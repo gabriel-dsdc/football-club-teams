@@ -27,7 +27,13 @@ class MatchService {
 
   async createMatch(match: IMatch) {
     if (match.homeTeam === match.awayTeam) {
-      return { message: 'It is not possible to create a match with two equal teams' };
+      return { status: 422, message: 'It is not possible to create a match with two equal teams' };
+    }
+    const matchFind = await Promise.all(
+      [match.homeTeam, match.awayTeam].map((id) => TeamModel.findOne({ where: { id } })),
+    );
+    if (matchFind.includes(undefined || null)) {
+      return { status: 404, message: 'There is no team with such id!' };
     }
     this._newMatch = await MatchModel.create({ ...match, inProgress: true });
     return this._newMatch;
