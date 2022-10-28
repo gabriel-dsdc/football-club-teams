@@ -19,7 +19,10 @@ class MatchController {
     const { homeTeam, homeTeamGoals, awayTeam, awayTeamGoals } = req.body;
     const newMatch = await this.service.createMatch(
       { homeTeam, homeTeamGoals, awayTeam, awayTeamGoals },
-    );
+    ) as { message: string };
+    if (newMatch.message) {
+      return res.status(422).json({ message: newMatch.message });
+    }
     res.status(201).json(newMatch);
   }
 

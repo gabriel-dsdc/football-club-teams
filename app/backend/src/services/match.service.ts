@@ -26,6 +26,9 @@ class MatchService {
   }
 
   async createMatch(match: IMatch) {
+    if (match.homeTeam === match.awayTeam) {
+      return { message: 'It is not possible to create a match with two equal teams' };
+    }
     this._newMatch = await MatchModel.create({ ...match, inProgress: true });
     return this._newMatch;
   }
