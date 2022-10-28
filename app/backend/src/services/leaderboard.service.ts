@@ -13,7 +13,7 @@ class LeaderboardService {
     this._allTeams = await TeamModel.findAll();
     this._allMatches = await Promise.all(
       this._allTeams.map((team) => MatchModel.findAll({
-        where: { homeTeam: team.id },
+        where: { homeTeam: team.id, inProgress: false },
         include: { model: TeamModel, as: 'teamHome', attributes: ['teamName'] },
       })),
     );
