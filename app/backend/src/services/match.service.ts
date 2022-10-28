@@ -6,6 +6,7 @@ import { IMatch } from '../interfaces/IMatch';
 class MatchService {
   private _allMatches: MatchModel[];
   private _newMatch: MatchModel;
+  private _finishedMatch: [number, MatchModel[]];
   protected userService: UserService;
 
   async getAll(inProgress: boolean | undefined) {
@@ -27,6 +28,11 @@ class MatchService {
   async createMatch(match: IMatch) {
     this._newMatch = await MatchModel.create({ ...match, inProgress: true });
     return this._newMatch;
+  }
+
+  async finishMatch(id: number) {
+    this._finishedMatch = await MatchModel.update({ inProgress: false }, { where: { id } });
+    return this._finishedMatch;
   }
 }
 

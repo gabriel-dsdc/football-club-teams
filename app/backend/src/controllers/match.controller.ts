@@ -22,6 +22,12 @@ class MatchController {
     );
     res.status(201).json(newMatch);
   }
+
+  async finishMatch(req: Request, res: Response) {
+    const { id } = req.params;
+    await this.service.finishMatch(Number(id));
+    res.status(200).json({ message: 'Finished' });
+  }
 }
 
 export default MatchController;
