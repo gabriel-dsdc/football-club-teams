@@ -34,7 +34,7 @@ class LeaderboardService {
       goalsFavor,
       goalsOwn,
       goalsBalance: goalsFavor - goalsOwn,
-      efficiency: Number(((totalPoints / (teamMatches.length * 3)) * 100).toFixed(2)),
+      efficiency: ((totalPoints / (teamMatches.length * 3)) * 100).toFixed(2),
     };
     return this._teamStats;
   }

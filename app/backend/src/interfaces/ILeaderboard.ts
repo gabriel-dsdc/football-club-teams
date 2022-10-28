@@ -8,7 +8,7 @@ export interface ILeaderboard {
   goalsFavor: number,
   goalsOwn: number,
   goalsBalance: number,
-  efficiency: number
+  efficiency: string
 }
 
 export const initialStats = {
@@ -21,5 +21,5 @@ export const initialStats = {
   goalsFavor: 0,
   goalsOwn: 0,
   goalsBalance: 0,
-  efficiency: 0,
+  efficiency: '0.00',
 };
