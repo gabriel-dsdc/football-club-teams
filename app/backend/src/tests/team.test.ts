@@ -4,33 +4,30 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
-import User from '../database/models/User';
+import TeamModel from '../database/models/Team';
 
 import { Response } from 'superagent';
-import { token, user } from './mocks/user.mock';
-const { dbUser, validUser } = user;
-
-import UserService from '../services/user.service';
 import { teamList } from './mocks/team.mock';
+
 chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('Users e Login', () => {
+describe('Times', () => {
   let res: Response;
-  let userService: UserService;
 
   beforeEach(async () => {
-    userService = new UserService();
     sinon
-      .stub(User, "findOne")
-      .resolves({
-        ...dbUser,
-      } as User);
+      .stub(TeamModel, "findAll")
+      .resolves(teamList as TeamModel[]);
+    sinon
+    .stub(TeamModel, 'findByPk')
+    .resolves(teamList[0] as TeamModel);
   });
 
   afterEach(()=>{
-    (User.findOne as sinon.SinonStub).restore();
+    (TeamModel.findAll as sinon.SinonStub).restore();
+    (TeamModel.findByPk as sinon.SinonStub).restore();
   })
 
   describe('GET /teams', () => {

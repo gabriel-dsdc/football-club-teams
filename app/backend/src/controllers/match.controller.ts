@@ -10,7 +10,8 @@ class MatchController {
 
   async getAll(req: Request, res: Response) {
     const { inProgress } = req.query;
-    const allMatches = await this.service.getAll(inProgress === 'true');
+    const inProgressQuery = inProgress ? inProgress === 'true' : undefined;
+    const allMatches = await this.service.getAll(inProgressQuery);
     res.status(200).json(allMatches);
   }
 }
