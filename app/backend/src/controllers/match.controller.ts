@@ -14,6 +14,14 @@ class MatchController {
     const allMatches = await this.service.getAll(inProgressQuery);
     res.status(200).json(allMatches);
   }
+
+  async createMatch(req: Request, res: Response) {
+    const { homeTeam, homeTeamGoals, awayTeam, awayTeamGoals } = req.body;
+    const newMatch = await this.service.createMatch(
+      { homeTeam, homeTeamGoals, awayTeam, awayTeamGoals },
+    );
+    res.status(201).json(newMatch);
+  }
 }
 
 export default MatchController;
