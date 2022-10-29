@@ -24,4 +24,12 @@ export const initialStats = {
   efficiency: '0.00',
 };
 
+export interface IFullLeaderboard {
+  home: ILeaderboard,
+  away: ILeaderboard
+}
+
+export type lbKey = 'totalPoints' | 'totalGames' | 'totalVictories'
+| 'totalDraws' | 'totalLosses' | 'goalsFavor' | 'goalsOwn' | 'goalsBalance';
+
 export type homeOrAway = 'home' | 'away';

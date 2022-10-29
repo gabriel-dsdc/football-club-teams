@@ -1,7 +1,8 @@
 import TeamModel from '../database/models/Team';
 import MatchModel from '../database/models/Match';
 import UserService from './user.service';
-import { homeOrAway, ILeaderboard, initialStats } from '../interfaces/ILeaderboard';
+import { homeOrAway, IFullLeaderboard,
+  ILeaderboard, initialStats, lbKey } from '../interfaces/ILeaderboard';
 
 class LeaderboardService {
   private _allTeams: TeamModel[];
@@ -86,6 +87,26 @@ class LeaderboardService {
     }, []);
     this.sortLeaderboard();
     return this._leaderboard;
+  }
+
+  async leaderboard() {
+    const homeLb = await this.homeLeaderboard(); const awayLb = await this.awayLeaderboard();
+    const homeAwayScores = homeLb.reduce((acc: IFullLeaderboard[], home) => {
+      acc.push({ home, away: awayLb.find((tAway) => tAway.name === home.name) || home });
+      return acc;
+    }, []);
+    this._leaderboard = homeAwayScores.reduce((acc: ILeaderboard[], { home, away }) => {
+      const lbTeam = Object.keys(home).reduce((acc2: ILeaderboard, key) => {
+        const lbObj = { ...acc2 };
+        if (Object.prototype.hasOwnProperty.call(away, key)
+        && typeof home[key as lbKey] !== 'string') {
+          lbObj[key as lbKey] = (home[key as lbKey] + away[key as lbKey]);
+        } return lbObj;
+      }, { ...home });
+      lbTeam.efficiency = ((lbTeam.totalPoints / (lbTeam.totalGames * 3)) * 100).toFixed(2);
+      acc.push(lbTeam); return acc;
+    }, []);
+    this.sortLeaderboard(); return this._leaderboard;
   }
 }
 
