@@ -23,3 +23,5 @@ export const initialStats = {
   goalsBalance: 0,
   efficiency: '0.00',
 };
+
+export type homeOrAway = 'home' | 'away';
