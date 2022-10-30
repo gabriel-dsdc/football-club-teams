@@ -672,3 +672,29 @@ export const matchList = [
     }
   }
 ];
+
+export const createMatchReqBody = {
+  "homeTeam": 16,
+  "awayTeam": 8,
+  "homeTeamGoals": 2,
+  "awayTeamGoals": 2,
+}
+
+export const createMatchReqBody422 = {
+  "homeTeam": 8,
+  "awayTeam": 8,
+  "homeTeamGoals": 2,
+  "awayTeamGoals": 2,
+}
+
+export const createMatchReqBody404 = {
+  "homeTeam": 42,
+  "awayTeam": 8,
+  "homeTeamGoals": 2,
+  "awayTeamGoals": 2,
+}
+
+export const editMatchReqBody = {
+  "homeTeamGoals": 3,
+  "awayTeamGoals": 1,
+}

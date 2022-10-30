@@ -73,7 +73,7 @@ class LeaderboardService {
     const allMatches = await this.allMatches('home');
     this._leaderboard = allMatches.map((teamMatches) => {
       const finalStats = this.calcScore(teamMatches, 'home', 'away');
-      return this.teamStats(teamMatches[0].teamHome?.teamName, teamMatches.length, finalStats);
+      return this.teamStats(teamMatches[0].teamHome.teamName, teamMatches.length, finalStats);
     }, []);
     this.sortLeaderboard();
     return this._leaderboard;
@@ -83,7 +83,7 @@ class LeaderboardService {
     const allMatches = await this.allMatches('away');
     this._leaderboard = allMatches.map((teamMatches) => {
       const finalStats = this.calcScore(teamMatches, 'away', 'home');
-      return this.teamStats(teamMatches[0].teamAway?.teamName, teamMatches.length, finalStats);
+      return this.teamStats(teamMatches[0].teamAway.teamName, teamMatches.length, finalStats);
     }, []);
     this.sortLeaderboard();
     return this._leaderboard;
@@ -92,7 +92,7 @@ class LeaderboardService {
   async leaderboard() {
     const homeLb = await this.homeLeaderboard(); const awayLb = await this.awayLeaderboard();
     const homeAwayScores = homeLb.reduce((acc: IFullLeaderboard[], home) => {
-      acc.push({ home, away: awayLb.find((tAway) => tAway.name === home.name) || home });
+      acc.push({ home, away: awayLb.find((tAway) => tAway.name === home.name) as ILeaderboard });
       return acc;
     }, []);
     this._leaderboard = homeAwayScores.reduce((acc: ILeaderboard[], { home, away }) => {

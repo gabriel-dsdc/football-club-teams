@@ -32,7 +32,8 @@ class MatchService {
     const matchFind = await Promise.all(
       [match.homeTeam, match.awayTeam].map((id) => TeamModel.findOne({ where: { id } })),
     );
-    if (matchFind.includes(undefined || null)) {
+
+    if (matchFind.includes(null)) {
       return { status: 404, message: 'There is no team with such id!' };
     }
     this._newMatch = await MatchModel.create({ ...match, inProgress: true });
